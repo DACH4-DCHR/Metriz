@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>METRIZ v2.2 · Sistema de Metrados Estructurales</title>
+<title>METRIZ v2.3 · Sistema de Metrados Estructurales</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -243,7 +243,7 @@ table.rp-t tr.tot td{font-weight:700;background:#F0F3F6}
     <div>
       <div class="brand">
         <svg width="40" height="40" viewBox="0 0 40 40"><rect x="2" y="2" width="36" height="36" fill="none" stroke="#E4630A" stroke-width="2.5"/><rect x="7" y="7" width="26" height="5" fill="#E4630A"/><line x1="12" y1="15" x2="12" y2="33" stroke="#fff" stroke-width="2.5"/><line x1="20" y1="15" x2="20" y2="33" stroke="#fff" stroke-width="2.5"/><line x1="28" y1="15" x2="28" y2="33" stroke="#fff" stroke-width="2.5"/></svg>
-        <div><div class="word">METR<i>I</i>Z</div><div class="lg-tag">SISTEMA DE METRADOS · v2.2 · 11 MÓDULOS</div></div>
+        <div><div class="word">METR<i>I</i>Z</div><div class="lg-tag">SISTEMA DE METRADOS · v2.3 · 11 MÓDULOS</div></div>
       </div>
     </div>
     <div class="lg-specs">
@@ -252,7 +252,7 @@ table.rp-t tr.tot td{font-weight:700;background:#F0F3F6}
       <b>05–10</b> — SUPERESTRUCTURA<br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; col. · placas · vigas · losas · escaleras<br>
       <b>11</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — ALBAÑILERÍA<br>
-      <b>NORMA</b>&nbsp; — NTP 331.017 · RNE E.060 · GH-60
+      <b>EXTRA</b>&nbsp; — negativos · zanca · ligaduras · tarrajeo
     </div>
     <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#5C7590">UNIDADES: SISTEMA MÉTRICO DECIMAL · MKS</div>
   </div>
@@ -285,7 +285,7 @@ table.rp-t tr.tot td{font-weight:700;background:#F0F3F6}
     <nav id="mainNav"></nav>
     <div class="as-foot">
       <div class="who"><span class="dot"></span><div><b id="fUserName">—</b><span id="fUserRole" style="color:#5C7590">—</span></div></div>
-      <div class="st">v2.2 · <span id="netState">OPERATIVO SIN RED</span></div>
+      <div class="st">v2.3 · <span id="netState">OPERATIVO SIN RED</span></div>
       <button class="nv" style="padding:6px 0;color:#7E93A6" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" style="width:14px;height:14px"><path d="M9 4H4v16h5M14 8l4 4-4 4M8 12h10"/></svg>Cerrar sesión</button>
     </div>
   </aside>
@@ -368,11 +368,12 @@ table.rp-t tr.tot td{font-weight:700;background:#F0F3F6}
 <script>
 'use strict';
 /* ================================================================
-   METRIZ v2.2 — Sistema de Metrados Estructurales (Perú)
-   11 módulos en orden de ejecución constructiva:
-   CIMENTACIÓN (01–04) → SUPERESTRUCTURA (05–10) → ALBAÑILERÍA (11)
-   Normativa: NTP 331.017 · RNE E.060 · acero GH-60 (pulgadas)
-   Protección: errores visibles en pantalla (#fatalBox)
+   METRIZ v2.3 — Sistema de Metrados Estructurales (Perú)
+   11 módulos en orden de ejecución: CIMENTACIÓN (01–04) →
+   SUPERESTRUCTURA (05–10) → ALBAÑILERÍA (11)
+   Novedades v2.3: negativos en apoyos, zanca en escaleras,
+   ligaduras en columnas, tarrajeo en cimentación.
+   Login a prueba de fallos · planos blindados · nombres integrados
    ================================================================ */
 window.onerror=function(msg,src,line){
   try{
@@ -500,7 +501,7 @@ function dimV(x,y1,y2,txt){
 const emptyDraft=t=>'<svg viewBox="0 0 640 240"><text x="320" y="112" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#B6C2CC">PLANO NO DISPONIBLE</text><text x="320" y="132" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#CBD5DC">'+t.toUpperCase()+'</text></svg>';
 const emptyMsg=t=>'<div class="empty">'+t+'</div>';
 
-/* ---------- cálculos: losa aligerada ---------- */
+/* ---------- LOSA ALIGERADA (cálculo + svg) ---------- */
 function calcLosa(){
   const okL=check('lx',0.2,60),okA=check('ly',0.2,60),okH=check('hLos',10,40);
   const okS=check('sRep',0.1,0.5),okV=check('sepV',15,90);
@@ -583,9 +584,9 @@ function svgLosa(res){
   g+='<text x="'+(x0+bw)+'" y="'+(y0+34)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+(esTec?'TECNOPOR':'ARCILLA')+' '+r.lad.cod+' · N = '+r.N+' · NERVIO '+fmt(r.wn*100,1)+' cm · '+r.nB+'Ø '+bNom(r.dB)+'</text>';
   return '<svg viewBox="0 0 '+W+' '+(y0+52)+'" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="hlad" width="5" height="10" patternUnits="userSpaceOnUse"><rect width="5" height="10" fill="#F4F1EA"/><line x1="1.6" y1="0" x2="1.6" y2="10" stroke="#C9BFA8" stroke-width="1.4"/></pattern><pattern id="leps" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#EAF2F6"/><circle cx="2" cy="2" r="0.9" fill="#C9D8E2"/><circle cx="5" cy="5" r="0.9" fill="#C9D8E2"/></pattern></defs>'+g+'</svg>';
 }
-/* ---------- cálculos: escaleras ---------- */
+/* ---------- ESCALERAS (cálculo + svg) ---------- */
 function calcEsc(){
-  const ok=check('hPis',1,12)&&check('nPel',2,60)&&check('hue',20,45)&&check('cch',10,25)&&check('ancE',0.6,6)&&check('espE',8,35)&&check('sPrE',0.1,0.35)&&check('sDiE',0.15,0.5);
+  const ok=check('hPis',1,12)&&check('nPel',2,60)&&check('hue',20,45)&&check('cch',10,25)&&check('ancE',0.6,6)&&check('espE',8,35)&&check('sPrE',0.1,0.35)&&check('sDiE',0.15,0.5)&&check('bz',15,60)&&check('hz',20,80)&&check('nZ',2,12);
   const r={ok,memoria:[],partidas:[],warns:[]};if(!ok)return r;
   const tipo=$('tipoE').value,H=V('hPis').n,N=V('nPel').n;
   const hu=V('hue').n/100,c=V('cch').n/100,an=V('ancE').n,e=V('espE').n/100;
@@ -606,11 +607,23 @@ function calcEsc(){
   });
   let areaDesc=0,volDesc=0;
   desc.forEach(d=>{areaDesc+=d.x*d.y;volDesc+=d.x*d.y*e;area+=d.x*d.y;});
-  const vol=volFald+volEsc+volDesc;
-  const encof=liT*an+areaDesc+N*an*c+2*liT*e;
-  const acero=acP+acD;
+  /* v2.3: zanca */
+  const zanca=$('zancaSi').value==='si';
+  const bz=V('bz').n/100,hz=V('hz').n/100,dZ=+$('dZ').value,nZ=V('nZ').n;
+  let volZ=0,encZ=0,acZ=0,esZ=0;
+  if(zanca){
+    volZ=2*liT*bz*hz;
+    encZ=2*liT*(bz+2*hz);
+    acZ=2*nZ*(liT+0.60)*wBar(dZ);
+    const nEz=Math.floor(liT/0.20)+1;
+    const pEz=2*(bz+hz)+0.20;
+    esZ=2*nEz*pEz*wBar(9.53);
+  }
+  const vol=volFald+volEsc+volDesc+volZ;
+  const encof=liT*an+areaDesc+N*an*c+2*liT*e+encZ;
+  const acero=acP+acD+acZ+esZ;
   const tipoN={'1':'UN TRAMO','2':'DOS TRAMOS','L':'EN L','U':'EN U'}[tipo];
-  r.res={tipo,tipoN,H,N,hu,c,an,e,dhT,liT,area,vol,volEsc,volFald,encof,acero,acP,acD,desc,fc:$('fcE').value,nbT:tramos.length};
+  r.res={tipo,tipoN,H,N,hu,c,an,e,dhT,liT,area,vol,volEsc,volFald,volZ,encof,acero,acP,acD,acZ,esZ,zanca,bz,hz,dZ,nZ,desc,fc:$('fcE').value,nbT:tramos.length};
   r.memoria=[
     ['Contrahuella · verificación','N × c = '+N+' × '+fmt(c*100,2)+' cm vs H',fmt(N*c,2)+' m'],
     ['Regla de Blondel','2c + h = '+fmt(bl,1)+' cm',(bl>=58&&bl<=66)?'CONFORTE ✓':'REVISAR ⚠'],
@@ -620,11 +633,14 @@ function calcEsc(){
     ['Área proyectada','tramos + descansos',fmt(area)+' m²'],
     ['Volumen faldón','Li × ancho × '+fmt(e*100,0)+' cm',fmt(volFald,3)+' m³'],
     ['Volumen peldaños','N × (hu·c/2) × ancho',fmt(volEsc,3)+' m³'],
-    ["Concreto f'c "+$('fcE').value,'faldón + peldaños + descansos',fmt(vol,3)+' m³'],
+    ['Zanca (2 vigas inclinadas)',zanca?'2 × Li × '+fmt(bz,2)+' × '+fmt(hz,2)+' m':'Sin zanca',zanca?fmt(volZ,3)+' m³':'—'],
+    ["Concreto f'c "+$('fcE').value,'faldón + peldaños + descansos + zanca',fmt(vol,3)+' m³'],
     ['Acero principal Ø '+bNom(dP),'@ '+fmt(sP*100,0)+' · Li+0.80',fmt(acP,1)+' kg'],
     ['Acero distribución Ø '+bNom(dD),'@ '+fmt(sD*100,0),fmt(acD,1)+' kg'],
-    ['Acero total','principal + distribución',fmt(acero,1)+' kg'],
-    ['Encofrado','fondo + contrahuellas + laterales',fmt(encof)+' m²']
+    ['Acero de zanca Ø '+bNom(dZ),zanca?nZ+'Ø por zanca × 2 · Li+0.60':zanca?'':'—',zanca?fmt(acZ,1)+' kg':'—'],
+    ['Estribos de zanca Ø 3/8"',zanca?'@ 0.20 m · perímetro '+fmt(2*(bz+hz)+0.20,2)+' m':'—',zanca?fmt(esZ,1)+' kg':'—'],
+    ['Acero total','principal + distribución + zanca',fmt(acero,1)+' kg'],
+    ['Encofrado','fondo + contrahuellas + laterales + zanca',fmt(encof)+' m²']
   ];
   r.partidas=[
     {k:'conc',p:"Concreto f'c "+$('fcE').value,u:'m³',q:vol,fc:+$('fcE').value},
@@ -656,6 +672,10 @@ function svgEsc(res){
   g+=tramo(n1,dh1,h1,x);x+=dh1;
   if(r.desc.length){g+='<path d="M'+X(x)+' '+Y(h1)+' h'+(desW*s)+' v-'+(e*s)+' h-'+(desW*s)+' Z" fill="#F2F5F8" stroke="#0F2537" stroke-width="1.8"/>';x+=desW;}
   if(n2>0)g+=tramo(n2,dh2,h1,x);
+  if(r.zanca){
+    g+='<line x1="'+(X(0)-6)+'" y1="'+(Y(0)+4)+'" x2="'+(X(dh1)-6)+'" y2="'+(Y(h1)+4)+'" stroke="#C4520A" stroke-width="3" opacity="0.45"/>';
+    g+='<text x="'+(X(dh1/2))+'" y="'+(Y(h1/2)+22)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#C4520A">ZANCA 2×'+fmt(r.bz*100,0)+'×'+fmt(r.hz*100,0)+' cm</text>';
+  }
   g+=dimV(x0-22,Y(0),Y(h1*2),'H = '+fmt(V('hPis').n,2)+' m');
   g+=dimH(X(0),X(totW),y0+42,'DESARROLLO HORIZONTAL = '+fmt(totW)+' m');
   g+='<text x="'+(W-8)+'" y="'+(y0+60)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+r.tipoN+' · '+N+' PELDAÑOS · LOSA '+fmt(e*100,0)+' cm · Ø '+bNom(+$('dPrE').value)+' @ '+fmt(V('sPrE').n*100,0)+'</text>';
@@ -663,7 +683,7 @@ function svgEsc(res){
 }
 
 /* ================================================================
-   MÓDULOS
+   MÓDULOS (con nombre integrado — fin de los undefined)
    ================================================================ */
 const IC={
   slab:'<rect x="3" y="8" width="18" height="8"/><line x1="3" y1="12" x2="21" y2="12"/>',
@@ -680,7 +700,7 @@ const M={};
 
 /* ---- 01 ZAPATAS ---- */
 M.zapata={
-  num:'01',stage:'CIMENTACIÓN',icon:IC.zap,
+  num:'01',name:'Zapatas',stage:'CIMENTACIÓN',icon:IC.zap,
   desc:'Zapatas aisladas rectangulares. Malla inferior en dos direcciones con recubrimiento de contacto con el suelo (7.5 cm).',
   fields:[
     fs('Geometría',[
@@ -723,7 +743,8 @@ M.zapata={
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=560;
     const s=Math.min((W-160)/Math.max(r.A,r.B),170/Math.max(r.h,0.3));
     const aw=r.A*s,wh=r.h*s,x0=(W-aw)/2,y0=190;
@@ -738,7 +759,7 @@ M.zapata={
     }
     g+=dimH(x0,x0+aw,y0+20,'A = '+fmt(r.A,2)+' m');
     g+=dimV(x0-24,y0-wh,y0,'h = '+fmt(r.h*100,0)+' cm');
-    g+='<text x="'+(x0+aw)+'" y="'+(y0-wh-46)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">MALLA '+r.nA+'+'+r.nB+'Ø '+bNom(r.d)+' @ '+fmt(r.s*100,0)+' · rec '+fmt(V('zrec').n,1)+' cm</text>';
+    g+='<text x="'+(x0+aw)+'" y="'+(y0-wh-46)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">MALLA '+r.nA+'+'+r.nB+'Ø '+bNom(r.d)+' @ '+fmt(r.s*100,0)+' · rec '+fmt(r.rec*100,1)+' cm</text>';
     return '<svg viewBox="0 0 '+W+' '+(y0+42)+'" xmlns="http://www.w3.org/2000/svg">'+g+'</svg>';
   },
   det:r=>fmt(r.vol,3)+' m³ · '+fmt(r.acero,1)+' kg acero',
@@ -747,7 +768,7 @@ M.zapata={
 
 /* ---- 02 VIGAS DE CIMENTACIÓN ---- */
 M.vcf={
-  num:'02',stage:'CIMENTACIÓN',icon:IC.vcf,
+  num:'02',name:'Vigas de cimentación',stage:'CIMENTACIÓN',icon:IC.vcf,
   desc:'Vigas de cimentación de concreto armado. Fondo apoyado contra suelo (sin encofrado de fondo), recubrimiento 7.5 cm.',
   fields:[
     fs('Geometría',[
@@ -798,7 +819,8 @@ M.vcf={
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=520;
     const s=Math.min(300/((r.b||0.25)*2.2),150/(r.h||0.4));
     const b=r.b*s,h=r.h*s,x0=W/2-b/2,y0=200;
@@ -821,8 +843,8 @@ M.vcf={
 
 /* ---- 03 CIMIENTO CORRIDO ---- */
 M.cim={
-  num:'03',stage:'CIMENTACIÓN',icon:IC.cim,
-  desc:'Cimiento corrido de concreto ciclópeo para albañilería confinada. Incluye metrado de piedra boconcillo como material desplazador.',
+  num:'03',name:'Cimiento corrido',stage:'CIMENTACIÓN',icon:IC.cim,
+  desc:'Cimiento corrido de concreto ciclópeo para albañilería confinada. Incluye metrado de piedra boconcillo y tarrajeo opcional.',
   fields:[
     fs('Geometría',[
       fld({id:'knL',label:'Longitud total del cimiento',val:20.00,unit:'m',min:0.5,max:500}),
@@ -831,11 +853,13 @@ M.cim={
       fld({id:'knfc',label:'Resistencia de la mezcla',type:'sel',val:100,opts:[
         {v:100,t:"f'c 100 kg/cm² (mezcla 1:10 + piedra)"},{v:140,t:"f'c 140 kg/cm²"}]})
     ]),
-    fs('Piedra desplazadora (ciclópeo)',[
+    fs('Piedra desplazadora y acabado',[
       fld({id:'kbocon',label:'¿Colocar piedra boconcillo?',type:'sel',val:'si',full:true,opts:[
         {v:'si',t:'Sí — concreto ciclópeo con desplazador (práctica estándar)'},
         {v:'no',t:'No — concreto simple'}]}),
-      fld({id:'kpB',label:'% volumen de piedra',val:35,unit:'%',min:10,max:50})
+      fld({id:'kpB',label:'% volumen de piedra',val:35,unit:'%',min:10,max:50}),
+      fld({id:'kTar',label:'Tarrajeo primario',type:'sel',val:'no',full:true,opts:[
+        {v:'no',t:'Sin tarrajeo'},{v:'si',t:'Con tarrajeo primario en 2 caras'}]})
     ]),
     note("Recubrimiento no aplica (cimentación contra suelo, sin acero). Rendimiento: f'c 100 ≈ 5.2 sac cemento/m³ de mezcla. Encofrado lateral (2 caras).")
   ],
@@ -844,16 +868,19 @@ M.cim={
     const r={ok,memoria:[],partidas:[],warns:[]};if(!ok)return r;
     const L=V('knL').n,a=V('knA').n/100,h=V('knH').n/100;
     const fc=+$('knfc').value,esB=$('kbocon').value==='si',pB=esB?V('kpB').n/100:0;
+    const esT=$('kTar').value==='si';
     const vol=L*a*h;
     const mezcla=vol*(1-pB),piedra=vol*pB;
     const encof=2*L*h;
+    const tar=esT?2*L*h:0;
     const cem=mezcla*REND_BY_FC[fc],are=mezcla*REND.are,pie=mezcla*REND.pie;
-    r.res={L,a,h,vol,mezcla,piedra,encof,cem,are,pie,fc,esB};
+    r.res={L,a,h,vol,mezcla,piedra,encof,cem,are,pie,fc,esB,tar,esT};
     r.memoria=[
       ['Volumen total de cimiento','L × a × h = '+fmt(L)+' × '+fmt(a,2)+' × '+fmt(h,2),fmt(vol,3)+' m³'],
       ["Mezcla de concreto f'c "+fc,esB?'total × (1 − '+fmt(pB*100,0)+'% piedra)':'total (sin desplazador)',fmt(mezcla,3)+' m³'],
-      ['Piedra boconcillo (desplazador)',esB?'total × '+fmt(pB*100,0)+'% (se aloja a mano en el vaciado)':'No aplica',fmt(piedra,3)+' m³'],
+      ['Piedra boconcillo (desplazador)',esB?'total × '+fmt(pB*100,0)+'%':'No aplica',fmt(piedra,3)+' m³'],
       ['Encofrado lateral (2 caras)','2 × L × h',fmt(encof)+' m²'],
+      ['Tarrajeo primario',esT?'2 caras × L × h':'No incluido',esT?fmt(tar)+' m²':'—'],
       ['Cemento Portland',REND_BY_FC[fc]+' sac/m³ de mezcla',fmt(cem,1)+' sac'],
       ['Arena fina',REND.are+' m³ por m³ de mezcla',fmt(are,2)+' m³'],
       ['Piedra chancada (mezcla)',REND.pie+' m³ por m³',fmt(pie,2)+' m³']
@@ -861,11 +888,13 @@ M.cim={
     r.partidas=[
       {k:'conc',p:"Concreto ciclópeo f'c "+fc,u:'m³',q:vol,fc:fc},
       ...(esB?[{k:'bocon',p:'Piedra boconcillo (desplazador)',u:'m³',q:piedra}]:[]),
-      {k:'encof',p:'Encofrado de cimiento corrido',u:'m²',q:encof}
+      {k:'encof',p:'Encofrado de cimiento corrido',u:'m²',q:encof},
+      ...(esT?[{k:'tarra',p:'Tarrajeo primario de cimentación',u:'m²',q:tar}]:[])
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=620;
     const s=Math.min(520/3,160/Math.max(r.h,0.3));
     const aw=3*s,wh=r.h*s,x0=(W-aw)/2,y0=210;
@@ -874,7 +903,7 @@ M.cim={
     stones.forEach(st=>{g+='<circle cx="'+(x0+aw*st[0])+'" cy="'+(y0-wh*st[1])+'" r="'+st[2]+'" fill="#EDE7DC" stroke="#8A99A8" stroke-width="1.1"/>';});
     g+=dimH(x0,x0+aw,y0+20,'MUESTRA 3.00 m · a = '+fmt(r.a,2)+' m');
     g+=dimV(x0-24,y0-wh,y0,'h = '+fmt(r.h*100,0)+' cm');
-    g+='<text x="'+(x0+aw)+'" y="'+(y0-wh-10)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+(r.esB?'CICLÓPEO '+fmt(r.pB*100,0)+'% PIEDRA':'CONCRETO SIMPLE')+" · f'c "+r.fc+'</text>';
+    g+='<text x="'+(x0+aw)+'" y="'+(y0-wh-10)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+(r.esB?'CICLÓPEO '+fmt(35,0)+'% PIEDRA':'CONCRETO SIMPLE')+" · f'c "+r.fc+'</text>';
     return '<svg viewBox="0 0 '+W+' '+(y0+42)+'" xmlns="http://www.w3.org/2000/svg">'+g+'</svg>';
   },
   det:r=>fmt(r.vol,3)+' m³ · '+(r.esB?fmt(r.piedra,2)+' m³ piedra':'concreto simple'),
@@ -883,8 +912,8 @@ M.cim={
 
 /* ---- 04 SOBRECIMIENTO ---- */
 M.sob={
-  num:'04',stage:'CIMENTACIÓN',icon:IC.cim,
-  desc:'Sobrecimiento de concreto simple sobre el cimiento corrido, hasta el nivel de piso terminado.',
+  num:'04',name:'Sobrecimiento',stage:'CIMENTACIÓN',icon:IC.cim,
+  desc:'Sobrecimiento de concreto simple sobre el cimiento corrido, hasta el nivel de piso terminado. Tarrajeo opcional.',
   fields:[
     fs('Geometría',[
       fld({id:'snL',label:'Longitud total',val:20.00,unit:'m',min:0.5,max:500}),
@@ -892,18 +921,25 @@ M.sob={
       fld({id:'snH',label:'Altura',val:20,unit:'cm',min:10,max:80}),
       fld({id:'snfc',label:'Resistencia concreto',type:'sel',val:175,opts:fcOpts})
     ]),
+    fs('Acabado',[
+      fld({id:'sTar',label:'Tarrajeo primario',type:'sel',val:'no',full:true,opts:[
+        {v:'no',t:'Sin tarrajeo'},{v:'si',t:'Con tarrajeo primario en 2 caras'}]})
+    ]),
     note('Concreto simple (sin acero estructural; alambre N°8 de amarro opcional no metrado). Encofrado en las 2 caras laterales.')
   ],
   calc(){
     const ok=check('snL',0.5,500)&&check('snA',10,60)&&check('snH',10,80);
     const r={ok,memoria:[],partidas:[],warns:[]};if(!ok)return r;
     const L=V('snL').n,a=V('snA').n/100,h=V('snH').n/100,fc=+$('snfc').value;
+    const esT=$('sTar').value==='si';
     const vol=L*a*h,encof=2*L*h;
+    const tar=esT?2*L*h:0;
     const cem=vol*REND_BY_FC[fc],are=vol*REND.are,pie=vol*REND.pie;
-    r.res={L,a,h,vol,encof,cem,are,pie,fc};
+    r.res={L,a,h,vol,encof,cem,are,pie,fc,tar,esT};
     r.memoria=[
       ["Volumen de concreto f'c "+fc,'L × a × h = '+fmt(L)+' × '+fmt(a,2)+' × '+fmt(h,2),fmt(vol,3)+' m³'],
       ['Encofrado (2 caras)','2 × L × h',fmt(encof)+' m²'],
+      ['Tarrajeo primario',esT?'2 caras × L × h':'No incluido',esT?fmt(tar)+' m²':'—'],
       ['Concreto simple — sin acero','alambre N°8 opcional (no metrado)','—'],
       ['Cemento Portland',REND_BY_FC[fc]+' sac/m³',fmt(cem,1)+' sac'],
       ['Arena fina',REND.are+' m³/m³',fmt(are,2)+' m³'],
@@ -911,11 +947,13 @@ M.sob={
     ];
     r.partidas=[
       {k:'conc',p:"Concreto f'c "+fc,u:'m³',q:vol,fc:fc},
-      {k:'encof',p:'Encofrado de sobrecimiento',u:'m²',q:encof}
+      {k:'encof',p:'Encofrado de sobrecimiento',u:'m²',q:encof},
+      ...(esT?[{k:'tarra',p:'Tarrajeo primario de cimentación',u:'m²',q:tar}]:[])
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=620;
     const s=Math.min(520/3,120/Math.max(r.h,0.1));
     const aw=3*s,wh=r.h*s,x0=(W-aw)/2,y0=170;
@@ -932,8 +970,8 @@ M.sob={
 
 /* ---- 05 COLUMNAS ---- */
 M.col={
-  num:'05',stage:'SUPERESTRUCTURA',icon:IC.col,
-  desc:'Columnas de concreto armado con confinamiento en rótulas (zona sísmica), acero longitudinal repartido en el perímetro y gancho de estribo a 135°.',
+  num:'05',name:'Columnas',stage:'SUPERESTRUCTURA',icon:IC.col,
+  desc:'Columnas de concreto armado con confinamiento en rótulas, ligaduras por barra alternada (v2.3) y gancho de estribo a 135°.',
   fields:[
     fs('Geometría',[
       fld({id:'cn',label:'Número de columnas',val:2,unit:'und',min:1,max:300}),
@@ -950,16 +988,19 @@ M.col={
         {v:'12d',t:'Gancho 12Ø (RNE E.060)'},{v:'10d',t:'10Ø'},{v:'15d',t:'15Ø'}]}),
       fld({id:'ctOS',label:'Traslape',val:40,unit:'Ø',min:20,max:60})
     ]),
-    fs('Estribos · confinamiento en rótulas',[
+    fs('Estribos · confinamiento y ligaduras',[
       fld({id:'cdE',label:'Ø de estribos',type:'sel',val:9.53,opts:dOpts()}),
       fld({id:'crec',label:'Recubrimiento (RNE: 4 cm)',val:4,unit:'cm',min:2,max:8}),
       fld({id:'czT',label:'Zona confinada (por rótula)',type:'sel',val:'2h',full:true,opts:[
         {v:'2h',t:'2h — recomendado zona sísmica 3'},{v:'1.5h',t:'1.5h'},{v:'1h',t:'1h'},{v:'man',t:'Manual (m)'}]}),
       fld({id:'czC',label:'Long. zona confinada/rótula',val:0.60,unit:'m',min:0.2,max:4}),
       fld({id:'csC',label:'Separación en zona confinada',val:0.10,unit:'m',min:0.05,max:0.25}),
-      fld({id:'csM',label:'Separación en fuste central',val:0.15,unit:'m',min:0.05,max:0.4})
+      fld({id:'csM',label:'Separación en fuste central',val:0.15,unit:'m',min:0.05,max:0.4}),
+      fld({id:'ligSi',label:'Ligaduras (barras intermedias)',type:'sel',val:'si',full:true,opts:[
+        {v:'si',t:'Sí — sujeta barras alternadas (E.060 / ACI 25.7.2.2)'},
+        {v:'no',t:'Sin ligaduras'}]})
     ]),
-    note('RNE E.060: mínimo 4 barras longitudinales · estribos con gancho 135° (extensión 6Ø) · rótulas confinadas con s ≤ 10 cm en longitud 2h.')
+    note('RNE E.060: mínimo 4 barras longitudinales · estribos con gancho 135° (extensión 6Ø) · rótulas confinadas s ≤ 10 cm en 2h · toda barra alternada sin esquina requiere ligadura.')
   ],
   calc(){
     const ok=check('cn',1,300)&&check('cL',0.5,30)&&check('ca',15,150)&&check('cb',15,150)&&check('cnL',4,24)&&check('csC',0.05,0.25)&&check('csM',0.05,0.4)&&check('crec',2,8)&&check('czC',0.2,4)&&check('ctOS',20,60);
@@ -974,19 +1015,25 @@ M.col={
     const nE=nConf+nCen;
     const perE=2*((a-2*rec)+(b-2*rec))+0.20;
     const pEst=nE*n*perE*wBar(dE);
-    const acero=g.peso*n+pEst;
+    /* v2.3: ligaduras */
+    const lig=$('ligSi').value==='si';
+    const nLigLvl=lig?Math.max(0,Math.ceil(g.n/2)-1):0;
+    const pLigU=(Math.min(a,b)-2*rec)+0.20;
+    const pLig=nLigLvl*nE*n*pLigU*wBar(dE);
+    const acero=g.peso*n+pEst+pLig;
     if(V('cnL').n<4)r.warns.push('RNE E.060: toda columna requiere mínimo 4 barras longitudinales.');
-    r.res={n,L,a,b,A,vol,encof,g,dE,nE,nConf,nCen,perE,acero,pEst,fc:$('cfc').value};
+    r.res={n,L,a,b,A,vol,encof,g,dE,nE,nConf,nCen,perE,acero,pEst,pLig,lig,nLigLvl,fc:$('cfc').value};
     r.memoria=[
       ['Área de sección','a × b = '+fmt(a*100,0)+' × '+fmt(b*100,0)+' cm',fmt(A*1e4,0)+' cm²'],
       ["Volumen de concreto f'c "+$('cfc').value,'n × L × A',fmt(vol,3)+' m³'],
       ['Encofrado (4 caras)','n × L × 2(a+b)',fmt(encof)+' m²'],
-      ['Acero longitudinal',g.n+'Ø '+bNom(g.d)+' · corte '+fmt(g.Lc,3)+' m · '+g.nT+' traslape(s) · '+wBar(g.d).toFixed(3)+' kg/m',fmt(g.peso*n,1)+' kg'],
+      ['Acero longitudinal',g.n+'Ø '+bNom(g.d)+' · corte '+fmt(g.Lc,3)+' m · '+g.nT+' traslape(s)',fmt(g.peso*n,1)+' kg'],
       ['Estribos zona confinada','2 rótulas × ('+fmt(z,2)+'/'+fmt(sC,2)+'+1) = '+nConf+' und/col @ '+fmt(sC*100,0)+' cm',nConf+' und/col'],
       ['Estribos fuste central','('+fmt(L,2)+' − 2×'+fmt(z,2)+') / '+fmt(sM,2)+' = '+nCen+' und/col',nCen+' und/col'],
       ['Total de estribos Ø '+bNom(dE),'('+nConf+'+'+nCen+') × '+n+' col · perímetro '+fmt(perE,2)+' m (gancho 135°)',fmt(nE*n,0)+' und'],
       ['Peso de estribos','nº × perímetro × '+wBar(dE).toFixed(3)+' kg/m',fmt(pEst,1)+' kg'],
-      ['Acero total','longitudinal + estribos',fmt(acero,1)+' kg']
+      ['Ligaduras (E.060 10.7.4.2)',lig?nLigLvl+' por nivel × '+nE+' niveles × '+n+' col · L='+fmt(pLigU,2)+' m':'No consideradas',lig?fmt(pLig,1)+' kg':'—'],
+      ['Acero total','longitudinal + estribos + ligaduras',fmt(acero,1)+' kg']
     ];
     r.partidas=[
       {k:'conc',p:"Concreto f'c "+$('cfc').value,u:'m³',q:vol,fc:+$('cfc').value},
@@ -995,7 +1042,8 @@ M.col={
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=520;
     const s=Math.min(300/((r.a||0.3)*2.2),170/(r.b||0.3));
     const aw=r.a*s,bh=r.b*s,x0=W/2-aw/2,y0=230;
@@ -1013,9 +1061,13 @@ M.col={
       else{x=x0+rec;y=y0-bh+rec+(t-2*wI-hI);}
       g+='<circle cx="'+x+'" cy="'+y+'" r="'+rad+'" fill="#E4630A" stroke="#0F2537" stroke-width="0.8"/>';
     }
+    if(r.lig&&r.nLigLvl>0){
+      const yl=y0-bh/2;
+      g+='<line x1="'+(x0+rec+3)+'" y1="'+yl+'" x2="'+(x0+aw-rec-3)+'" y2="'+yl+'" stroke="#55677A" stroke-width="1" stroke-dasharray="4 3"/>';
+    }
     g+=dimH(x0,x0+aw,y0+22,'a = '+fmt(r.a*100,0)+' cm');
     g+=dimV(x0-26,y0-bh,y0,'b = '+fmt(r.b*100,0)+' cm');
-    g+='<text x="'+(x0+aw)+'" y="'+(y0-bh-12)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+r.g.n+'Ø '+bNom(r.g.d)+' · EST Ø '+bNom(r.dE)+' '+fmt(V('csC').n*100,0)+'/'+fmt(V('csM').n*100,0)+' · rec '+fmt(V('crec').n,1)+' cm</text>';
+    g+='<text x="'+(x0+aw)+'" y="'+(y0-bh-12)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+r.g.n+'Ø '+bNom(r.g.d)+' · EST Ø '+bNom(r.dE)+' '+fmt(V('csC').n*100,0)+'/'+fmt(V('csM').n*100,0)+(r.lig?' · LIG':'')+' · rec '+fmt(V('crec').n,1)+' cm</text>';
     return '<svg viewBox="0 0 '+W+' '+(y0+40)+'" xmlns="http://www.w3.org/2000/svg">'+g+'</svg>';
   },
   det:r=>fmt(r.vol,3)+' m³ · '+fmt(r.acero,1)+' kg acero',
@@ -1024,7 +1076,7 @@ M.col={
 
 /* ---- 06 PLACAS ---- */
 M.placa={
-  num:'06',stage:'SUPERESTRUCTURA',icon:IC.placa,
+  num:'06',name:'Placas',stage:'SUPERESTRUCTURA',icon:IC.placa,
   desc:'Placas de corte de concreto armado. Malla vertical y horizontal en las dos caras, con espesor mínimo normativo.',
   fields:[
     fs('Geometría',[
@@ -1068,7 +1120,8 @@ M.placa={
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=560;
     const s=Math.min((W-120)/Math.max(r.L,1),200/Math.max(r.H,1));
     const lw=r.L*s,lh=r.H*s,x0=(W-lw)/2,y0=40;
@@ -1087,8 +1140,8 @@ M.placa={
 
 /* ---- 07 VIGAS DE TECHO ---- */
 M.viga={
-  num:'07',stage:'SUPERESTRUCTURA',icon:IC.viga,
-  desc:'Vigas de techo de concreto armado. Despiece real: 2 líneas inferiores de Ø variable, acero superior, estribos con confinamiento 2h y fierros de piel. Anclaje y traslape por cada diámetro.',
+  num:'07',name:'Vigas de techo',stage:'SUPERESTRUCTURA',icon:IC.viga,
+  desc:'Despiece real: 2 líneas de Ø variable, superiores, negativos en apoyos (v2.3), confinamiento 2h y fierros de piel. Anclaje y traslape por diámetro.',
   fields:[
     fs('Geometría — RNE E.060',[
       fld({id:'nVig',label:'Número de vigas',val:2,unit:'und',min:1,max:200}),
@@ -1116,12 +1169,22 @@ M.viga={
     ]),
     fs('Acero superior — montaje y refuerzo negativo',[
       fld({id:'supSi',label:'¿Metrar superiores?',type:'sel',val:'si',full:true,opts:[
-        {v:'si',t:'Con acero superior (práctica estándar: montaje + negativos)'},
+        {v:'si',t:'Con acero superior (montaje)'},
         {v:'no',t:'Sin acero superior'}]}),
       fld({id:'dSup',label:'Ø de barras superiores',type:'sel',val:9.53,opts:dOpts()}),
       fld({id:'nSup',label:'Nº de barras superiores',val:2,unit:'und',min:2,max:20})
     ]),
-    note('Cada línea (A, B y superior) se metra con su propio diámetro: anclaje 12Ø y traslape 40Ø según el Ø de cada fierro.'),
+    fs('Refuerzo negativo en apoyos (v2.3)',[
+      fld({id:'negSi',label:'¿Metrar negativos en apoyos?',type:'sel',val:'si',full:true,opts:[
+        {v:'si',t:'Con negativos (práctica estándar en vigas principales)'},
+        {v:'no',t:'Sin negativos'}]}),
+      fld({id:'dNeg',label:'Ø de negativos',type:'sel',val:12.70,opts:dOpts()}),
+      fld({id:'nNeg',label:'Nº de barras por apoyo',val:2,unit:'und',min:1,max:20}),
+      fld({id:'lenNegT',label:'Longitud en el claro (por apoyo)',type:'sel',val:'L3',full:true,opts:[
+        {v:'L3',t:'L/3 — criterio habitual'},{v:'L4',t:'L/4'},{v:'man',t:'Manual (m)'}]}),
+      fld({id:'lenNegV',label:'Longitud manual (solo modo manual)',val:1.67,unit:'m',min:0.3,max:10})
+    ]),
+    note('Los negativos se colocan sobre los apoyos y se extienden al claro (L/3 habitual). Anclaje hacia el apoyo: 12Ø del diámetro del negativo. Son 2 apoyos por viga.'),
     fs('Anclaje y traslape',[
       fld({id:'ancTyp',label:'Criterio de anclaje (por extremo)',type:'sel',val:'12d',full:true,opts:[
         {v:'12d',t:'Gancho 90° · 12Ø (estándar RNE E.060 / ACI)'},
@@ -1135,7 +1198,7 @@ M.viga={
       fld({id:'dEst',label:'Ø de estribos',type:'sel',val:9.53,opts:dOpts()}),
       fld({id:'recV',label:'Recubrimiento (RNE: 4 cm)',val:4,unit:'cm',min:1.5,max:8}),
       fld({id:'zTyp',label:'Zona de confinamiento (por extremo)',type:'sel',val:'2h',full:true,opts:[
-        {v:'2h',t:'2h — recomendado en zona sísmica (2×altura)'},{v:'1.5h',t:'1.5h'},{v:'1h',t:'1h'},{v:'man',t:'Manual (m)'}]}),
+        {v:'2h',t:'2h — recomendado en zona sísmica'},{v:'1.5h',t:'1.5h'},{v:'1h',t:'1h'},{v:'man',t:'Manual (m)'}]}),
       fld({id:'zCon',label:'Long. zona confinada/extremo',val:0.80,unit:'m',min:0.2,max:5}),
       fld({id:'sConf',label:'Separación en zona confinada',val:0.10,unit:'m',min:0.05,max:0.25}),
       fld({id:'sEst',label:'Separación en zona central',val:0.15,unit:'m',min:0.05,max:0.4})
@@ -1153,7 +1216,7 @@ M.viga={
   calc(){
     const ok=check('nVig',1,200)&&check('lVig',0.5,40)&&check('bVig',10,120)&&check('hVig',15,200)&&check('sEst',0.05,0.4)&&check('recV',1.5,8)
       &&check('ancVal',5,100)&&check('Lcom',6,18)&&check('tOS',20,60)&&check('zCon',0.2,5)&&check('sConf',0.05,0.25)
-      &&check('nLong2',1,20)&&check('nSup',2,20);
+      &&check('nLong2',1,20)&&check('nSup',2,20)&&check('nNeg',1,20)&&check('lenNegV',0.3,10);
     const r={ok,memoria:[],partidas:[],warns:[]};if(!ok)return r;
     const sec=$('secT').value;
     if(sec==='tee'){check('bfV',15,200);check('hfV',5,60);}
@@ -1185,10 +1248,22 @@ M.viga={
     const gB=b2?linea(+$('dLong2').value,V('nLong2').n):null;
     const sSup=$('supSi').value==='si';
     const gS=sSup?linea(+$('dSup').value,V('nSup').n):null;
+    /* v2.3: negativos en apoyos */
+    const neg=$('negSi').value==='si';
+    const dNeg=+$('dNeg').value,nNeg=V('nNeg').n;
+    const lenT=$('lenNegT').value;
+    const Lneg=lenT==='L3'?L/3:lenT==='L4'?L/4:V('lenNegV').n;
+    const ancNeg=ancMan!==null?ancMan:(kAnc*dNeg/1000);
+    const trasNeg=tOS*dNeg/1000;
+    let LcN=Lneg+ancNeg,nTN=0;
+    if(LcN>Lcom){const te=Math.max(0.05,Lcom-trasNeg);nTN=Math.ceil((LcN-Lcom)/te);}
+    const LefN=LcN+nTN*trasNeg;
+    const pNeg=neg?nNeg*2*LefN*wBar(dNeg)*n:0;
+    const lenN_desc=lenT==='L3'?'L/3 = '+fmt(L/3,3)+' m':lenT==='L4'?'L/4 = '+fmt(L/4,3)+' m':'manual '+fmt(V('lenNegV').n,2)+' m';
     const pLong=(gA.peso+(gB?gB.peso:0)+(gS?gS.peso:0))*n;
-    const sumLong=(gA.n*gA.Lef+(gB?gB.n*gB.Lef:0)+(gS?gS.n*gS.Lef:0))*n;
+    const sumLong=(gA.n*gA.Lef+(gB?gB.n*gB.Lef:0)+(gS?gS.n*gS.Lef:0)+(neg?nNeg*2*LefN:0))*n;
     const descAnc=ancT==='man'?'manual '+fmt(V('ancVal').n,1)+' cm (todas las líneas)'
-      :kAnc+'Ø → A '+fmt(gA.anc*100,1)+' cm'+(gB?' · B '+fmt(gB.anc*100,1)+' cm':'')+(gS?' · sup '+fmt(gS.anc*100,1)+' cm':'');
+      :kAnc+'Ø → A '+fmt(gA.anc*100,1)+' cm'+(gB?' · B '+fmt(gB.anc*100,1)+' cm':'')+(gS?' · sup '+fmt(gS.anc*100,1)+' cm':'')+(neg?' · neg '+fmt(ancNeg*100,1)+' cm':'');
     const dS=+$('dEst').value;
     const z=V('zCon').n,sC=V('sConf').n,sM=V('sEst').n;
     const nExt=Math.floor(z/sC)+1,nConf=2*nExt;
@@ -1204,29 +1279,31 @@ M.viga={
       pPiel=nPiel*2*n*gA.Lc*wBar(dP);
     }
     if(h>0.90&&!piel)r.warns.push('Altura h = '+fmt(h*100,0)+' cm > 90 cm: E.060 10.7.2 exige acero de piel. Active la opción.');
-    const acero=pLong+pEst+pPiel;
-    r.res={n,L,b,h,sec,A,vol,encof,pLong,pEst,pPiel,acero,gA,gB,gS,descAnc,nEstX,nConf,nCen,perE,Lcom,tOS,ancT,piel,nPiel,dP,fc:$('fcV').value};
+    const acero=pLong+pEst+pPiel+pNeg;
+    r.res={n,L,b,h,sec,A,vol,encof,pLong,pEst,pPiel,pNeg,acero,gA,gB,gS,neg,dNeg,nNeg,LefN,nTN,lenN_desc,descAnc,nEstX,nConf,nCen,perE,Lcom,tOS,ancT,piel,nPiel,dP,fc:$('fcV').value};
     const filas=[
       ['Criterio de anclaje',descAnc,'—'],
-      ['Línea A — acero principal',gA.n+'Ø '+bNom(gA.d)+' · corte '+fmt(gA.Lc,3)+' m · '+gA.nT+' traslape(s) de '+fmt(gA.tras*100,1)+' cm',fmt(gA.peso*n,1)+' kg']
+      ['Línea A — acero principal',gA.n+'Ø '+bNom(gA.d)+' · corte '+fmt(gA.Lc,3)+' m · '+gA.nT+' traslape(s)',fmt(gA.peso*n,1)+' kg']
     ];
     if(gB)filas.push(['Línea B — Ø variable',gB.n+'Ø '+bNom(gB.d)+' · corte '+fmt(gB.Lc,3)+' m · '+gB.nT+' traslape(s)',fmt(gB.peso*n,1)+' kg']);
-    if(gS)filas.push(['Acero superior — montaje/negativo',gS.n+'Ø '+bNom(gS.d)+' · corte '+fmt(gS.Lc,3)+' m',fmt(gS.peso*n,1)+' kg']);
+    if(gS)filas.push(['Acero superior — montaje',gS.n+'Ø '+bNom(gS.d)+' · corte '+fmt(gS.Lc,3)+' m',fmt(gS.peso*n,1)+' kg']);
+    if(neg)filas.push(['Negativos en apoyos (2 apoyos)',nNeg+'Ø '+bNom(dNeg)+' por apoyo × 2 · '+lenN_desc+' + anclaje · '+nTN+' traslape(s)',fmt(pNeg,1)+' kg']);
     if(!gB)filas.push(['Línea B — Ø variable','Desactivada','—']);
     if(!gS)filas.push(['Acero superior','Desactivado','—']);
+    if(!neg)filas.push(['Negativos en apoyos','Desactivados','—']);
     r.memoria=[
       ['Área de sección',sec==='cus'?'A ingresada':sec==='rec'?'alma: b × h = '+fmt(b*100,0)+' × '+fmt(h*100,0)+' cm':'alma b·h + patín (bf−b)·hf',fmt(A*10000,0)+' cm²'],
       ["Volumen de concreto f'c "+$('fcV').value,'n × L × A',fmt(vol,3)+' m³'],
       ['Área de encofrado',sec==='tee'?'n × L × (2h + bf)':'n × L × (2h + b)',fmt(encof)+' m²'],
       ...filas,
-      ['Subtotal acero longitudinal','líneas A + B + superiores × '+n+' vigas',fmt(pLong,1)+' kg'],
+      ['Subtotal acero longitudinal',`líneas A + B + superiores + negativos × ${n} vigas`,fmt(pLong+pNeg,1)+' kg'],
       ['Estribos zona confinada','2 extremos × ('+fmt(z,2)+'/'+fmt(sC,2)+'+1) = '+nConf+' und/viga @ '+fmt(sC*100,0)+' cm',nConf+' und/viga'],
       ['Estribos zona central','('+fmt(L,2)+' − 2×'+fmt(z,2)+') / '+fmt(sM,2)+' = '+nCen+' und/viga',nCen+' und/viga'],
       ['Número total de estribos','('+nConf+'+'+nCen+') × '+n+' vigas',fmt(nEstX*n,0)+' und'],
       ['Perímetro de estribo Ø '+bNom(dS),'2[(b−2rec)+(h−2rec)] + 0.20',fmt(perE,2)+' m'],
       ['Peso de estribos','nº × perímetro × kg/m',fmt(pEst,1)+' kg'],
       ['Fierros de piel (RNE 10.7.2)',piel?nPiel+'Ø '+bNom(dP)+' por cara × 2 caras × corte '+fmt(gA.Lc,2)+' m':h>0.90?'REQUERIDO — h > 90 cm':'No aplicable',piel?fmt(pPiel,1)+' kg':'—'],
-      ['Acero total','longitudinal + estribos + piel',fmt(acero,1)+' kg'],
+      ['Acero total','longitudinal + estribos + piel + negativos',fmt(acero,1)+' kg'],
       ['Longitud total de fierro','Σ longitudes de corte',fmt(sumLong+nEstX*n*perE+(piel?nPiel*2*n*gA.Lc:0))+' m']
     ];
     r.partidas=[
@@ -1237,7 +1314,8 @@ M.viga={
     r.warns.push(...(acero/vol>160?['Cuantía elevada ('+fmt(acero/vol,0)+' kg/m³): verifique el despiece.']:[]));
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=520;
     const s=Math.min(300/((r.b||0.25)*2.2),150/(r.h||0.4));
     const b=r.b*s,h=r.h*s,x0=W/2-b/2,y0=210;
@@ -1269,9 +1347,10 @@ M.viga={
     const dS2=(gS?gS.d:9.53)/1000*s;
     const ySup=y0-h+rec+dS2/2+1;
     fila(gS?gS.n:2,dS2,ySup,'#16334C');
+    if(r.neg){const dN=r.dNeg/1000*s;fila(r.nNeg,dN,y0-h+rec+dS2+dN+2,'#8A5A2B');}
     if(r.piel&&r.nPiel>0){
       const dP=r.dP/1000*s;
-      const yTop=ySup+dS2+3,yBot=ybA-((gB?gB.d/1000*s:0))-6;
+      const yTop=ySup+dS2+3+(r.neg?6:0),yBot=ybA-((gB?gB.d/1000*s:0))-6;
       for(let i=1;i<=r.nPiel;i++){
         const yy=yTop+(yBot-yTop)*i/(r.nPiel+1);
         [x0+rec+2.5,x0+b-rec-2.5].forEach(cx=>{g+='<circle cx="'+cx+'" cy="'+yy+'" r="'+Math.max(2.4,dP)+'" fill="#C4520A" stroke="#0F2537" stroke-width="0.6"/>';});
@@ -1280,7 +1359,7 @@ M.viga={
     g+=dimH(x0,x0+b,y0+22,'b = '+fmt(r.b*100,0)+' cm');
     g+=dimV(x0-26,y0-h,y0,'h = '+fmt(r.h*100,0)+' cm');
     g+='<line x1="'+(x0+b+40)+'" y1="'+y0+'" x2="'+(x0+b+8)+'" y2="'+y0+'" stroke="#C4520A" stroke-width="0.9"/><text x="'+(x0+b+44)+'" y="'+(y0+3)+'" font-family="JetBrains Mono" font-size="9" fill="#C4520A">rec = '+fmt(V('recV').n,1)+' cm</text>';
-    const desl=gA.n+'Ø '+bNom(gA.d)+(gB?' + '+gB.n+'Ø '+bNom(gB.d):'')+(gS?' · SUP '+gS.n+'Ø '+bNom(gS.d):'');
+    const desl=gA.n+'Ø '+bNom(gA.d)+(gB?' + '+gB.n+'Ø '+bNom(gB.d):'')+(gS?' · SUP '+gS.n+'Ø '+bNom(gS.d):'')+(r.neg?' · NEG '+r.nNeg+'Ø '+bNom(r.dNeg):'');
     const pielTxt=(r.piel&&r.nPiel>0)?' · PIEL '+r.nPiel+'×2Ø '+bNom(r.dP):'';
     g+='<text x="'+(x0+b)+'" y="'+(y0-h-32)+'" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#55677A">'+desl+' · EST Ø '+bNom(+$('dEst').value)+' '+fmt(V('sConf').n*100,0)+'/'+fmt(V('sEst').n*100,0)+pielTxt+'</text>';
     return '<svg viewBox="0 0 '+W+' '+(y0+40)+'" xmlns="http://www.w3.org/2000/svg">'+g+'</svg>';
@@ -1291,7 +1370,7 @@ M.viga={
 
 /* ---- 08 LOSA ALIGERADA ---- */
 M.losa={
-  num:'08',stage:'SUPERESTRUCTURA',icon:IC.slab,
+  num:'08',name:'Losa aligerada',stage:'SUPERESTRUCTURA',icon:IC.slab,
   desc:'Metrado con aligerantes peruanos: ladrillo de arcilla (NTP 331.017) o bloque de tecnopor EPS 120×30. Sección transversal en vivo.',
   fields:[
     fs('Geometría',[
@@ -1327,7 +1406,7 @@ M.losa={
 
 /* ---- 09 LOSA MACIZA ---- */
 M.maciza={
-  num:'09',stage:'SUPERESTRUCTURA',icon:IC.slab,
+  num:'09',name:'Losa maciza',stage:'SUPERESTRUCTURA',icon:IC.slab,
   desc:'Techos macizos de concreto armado. Malla superior e inferior en dos direcciones, con espesor y recubrimiento configurables.',
   fields:[
     fs('Geometría',[
@@ -1373,7 +1452,8 @@ M.maciza={
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=640;
     const bw=480,bh=Math.max(46,r.h*3.2);
     const x0=(W-bw)/2,y0=64;
@@ -1396,8 +1476,8 @@ M.maciza={
 
 /* ---- 10 ESCALERAS ---- */
 M.esc={
-  num:'10',stage:'SUPERESTRUCTURA',icon:IC.esc,
-  desc:'Tramo simple, dos tramos, en L o en U. Perfil desplegado con verificación automática de la regla de Blondel.',
+  num:'10',name:'Escaleras',stage:'SUPERESTRUCTURA',icon:IC.esc,
+  desc:'Tramo simple, dos tramos, en L o en U. Con zanca de apoyo opcional (v2.3) y verificación de la regla de Blondel.',
   fields:[
     fs('Geometría',[
       fld({id:'tipoE',label:'Tipo de escalera',type:'sel',val:'1',full:true,opts:[
@@ -1416,7 +1496,16 @@ M.esc={
       fld({id:'dDiE',label:'Ø distribución',type:'sel',val:9.53,opts:dOpts()}),
       fld({id:'sDiE',label:'Separación distribución',val:0.30,unit:'m',min:0.15,max:0.5})
     ]),
-    note('Práctica peruana estándar: principal Ø1/2" @ 0.20 m · distribución Ø3/8" @ 0.30 m · regla de Blondel: 2c + h entre 58 y 66 cm.')
+    fs('Zanca de apoyo (v2.3, opcional)',[
+      fld({id:'zancaSi',label:'¿Metrar zancas?',type:'sel',val:'no',full:true,opts:[
+        {v:'no',t:'Sin zanca (losa apoya en vigas/muros)'},
+        {v:'si',t:'Con zanca — 2 vigas inclinadas de apoyo'}]}),
+      fld({id:'bz',label:'Ancho de zanca',val:25,unit:'cm',min:15,max:60}),
+      fld({id:'hz',label:'Altura de zanca',val:40,unit:'cm',min:20,max:80}),
+      fld({id:'dZ',label:'Ø principal de zanca',type:'sel',val:12.70,opts:dOpts()}),
+      fld({id:'nZ',label:'Barras por zanca',val:4,unit:'und',min:2,max:12})
+    ]),
+    note('La zanca es la viga inclinada que recibe la losa del tramo: se metran 2 zancas (una por lado) con longitud igual a la inclinada del tramo.')
   ],
   calc(){return calcEsc();},
   svg(r){return svgEsc(r);},
@@ -1426,7 +1515,7 @@ M.esc={
 
 /* ---- 11 MUROS DE ALBAÑILERÍA ---- */
 M.muro={
-  num:'11',stage:'ALBAÑILERÍA',icon:IC.muro,
+  num:'11',name:'Muros de albañilería',stage:'ALBAÑILERÍA',icon:IC.muro,
   desc:'Tabiquería de arquitectura con ladrillos NTP 331.017 y bloques. Metrado de unidades, mortero de asiento y tarrajeo opcional.',
   fields:[
     fs('Geometría del muro',[
@@ -1480,7 +1569,8 @@ M.muro={
     ];
     return r;
   },
-  svg(r){
+  svg(res){
+    const r=res.res;if(!r)return '';
     const W=600;
     const s=Math.min((W-100)/Math.max(r.L,1),230/Math.max(r.H,1));
     const lw=r.L*s,lh=r.H*s,x0=(W-lw)/2,y0=40;
@@ -1504,13 +1594,7 @@ M.muro={
   det:r=>fmt(r.area,1)+' m² · '+fmt(r.unds,0)+' und '+r.u.cod,
   row:r=>fmt(r.area,1)+' m² · '+fmt(r.unds,0)+' '+r.u.cod+' · '+fmt(r.mort,2)+' m³ mort.'
 };
-/* CORRECCIÓN v2.2b: nombres blindados de los 11 módulos */
-(function(){
-  const NOM={zapata:'Zapatas',vcf:'Vigas de cimentación',cim:'Cimiento corrido',
-    sob:'Sobrecimiento',col:'Columnas',placa:'Placas',viga:'Vigas de techo',
-    losa:'Losa aligerada',maciza:'Losa maciza',esc:'Escaleras',muro:'Muros de albañilería'};
-  Object.keys(NOM).forEach(function(k){ if(M[k]) M[k].name=NOM[k]; });
-})();
+
 /* ================================================================
    INTERFAZ
    ================================================================ */
@@ -1537,7 +1621,7 @@ function buildNav(){
     h+='<div class="nav-stage">'+st.name+'</div>';
     st.keys.forEach(k=>{
       const m=M[k];
-      h+='<button class="nv" data-v="'+k+'"><span class="nn">'+m.num+'</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">'+m.icon+'</svg>'+m.name+'<span class="cnt" id="cnt-'+k+'">0</span></button>';
+      h+='<button class="nv" data-v="'+k+'"><span class="nn">'+m.num+'</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">'+m.icon+'</svg>'+(m.name||k)+'<span class="cnt" id="cnt-'+k+'">0</span></button>';
     });
   });
   h+='<div class="nav-lbl">GESTIÓN</div>';
@@ -1549,22 +1633,23 @@ function buildViews(){
   const views=$('views');
   KEYS.forEach(k=>{
     const m=M[k];
+    const nm=m.name||k;
     const d=document.createElement('div');
     d.className='view';d.id='v-'+k;
-    d.innerHTML='<div class="mhead"><div class="num">'+m.num+'</div><div><div class="stage">ETAPA · '+m.stage+'</div><h1>'+m.name+'</h1><p>'+m.desc+'</p></div><div class="sp"></div></div>'
+    d.innerHTML='<div class="mhead"><div class="num">'+m.num+'</div><div><div class="stage">ETAPA · '+m.stage+'</div><h1>'+nm+'</h1><p>'+m.desc+'</p></div><div class="sp"></div></div>'
       +'<div class="mod"><div><div class="panel"><div class="p-h"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>Parámetros de entrada</div><div class="p-b" id="f-'+k+'"></div></div>'
       +'<div class="toolbar"><button class="btn acc" id="btn-'+k+'" onclick="addElement(\''+k+'\')">+ Agregar al proyecto</button><button class="btn ghost sm" onclick="resetForm(\''+k+'\')">Restablecer</button></div></div>'
-      '<div class="draft"><span class="ttl">DIBUJO · '+String(m.name||'').toUpperCase()+'</span><span class="corner c1"></span><span class="corner c2"></span><span class="esc" id="esc-'+k+'">—</span><div id="svg-'+k+'"></div></div>'
+      +'<div><div class="draft"><span class="ttl">DIBUJO · '+String(nm).toUpperCase()+'</span><span class="corner c1"></span><span class="corner c2"></span><span class="esc" id="esc-'+k+'">—</span><div id="svg-'+k+'"></div></div>'
       +'<div class="panel" style="margin-top:18px"><div class="p-h"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Memoria de cálculo</div><div id="mem-'+k+'"></div></div>'
       +'<div class="panel"><div class="p-h"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="16"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>Cuadro de metrados</div><div id="pt-'+k+'"></div></div>'
       +'<div class="panel"><div class="p-h"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="6" width="18" height="14"/><line x1="3" y1="6" x2="21" y2="20"/></svg>Elementos en el proyecto</div><div id="list-'+k+'"></div></div></div></div>';
     views.appendChild(d);
   });
   const pr=document.createElement('div');pr.className='view';pr.id='v-precios';
-  pr.innerHTML='<div class="mhead"><div class="num">BD</div><div><h1>Materiales y precios</h1><p>Base de datos referencial editable. Solo el rol Administrador puede modificar valores; el presupuesto se recalcula al instante.</p></div><div class="sp"></div></div>'
+  pr.innerHTML='<div class="mhead"><div class="num">BD</div><div><h1>Materiales y precios</h1><p>Base de datos referencial editable. Solo el rol Administrador puede modificar valores.</p></div><div class="sp"></div></div>'
     +'<div class="dgrid"><div class="panel"><div class="p-h"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Precios unitarios referenciales</div>'
     +'<div class="p-b"><div class="priceg">'
-    +'<div class="pr"><label>Concreto (por m³) — según f\'c</label><input id="prConc" type="number" step="1"></div>'
+    +'<div class="pr"><label>Concreto (por m³)</label><input id="prConc" type="number" step="1"></div>'
     +'<div class="pr"><label>Acero GH-60 (por kg)</label><input id="prAcero" type="number" step="0.1"></div>'
     +'<div class="pr"><label>Encofrado (por m²)</label><input id="prEncof" type="number" step="0.5"></div>'
     +'<div class="pr"><label>Ladrillo de arcilla (por und)</label><input id="prLad" type="number" step="0.05"></div>'
@@ -1614,13 +1699,13 @@ function renderForms(){
 function mod(k){renderMod(k);}
 function renderMod(k){
   const m=M[k];
-  let r=null;
-  try{ r=m.calc(); }catch(e){ r={ok:false,memoria:[],partidas:[],warns:[]}; }
+  let r={ok:false,memoria:[],partidas:[],warns:[]};
+  try{r=m.calc();}catch(e){r={ok:false,memoria:[],partidas:[],warns:[]};}
   const btn=$('btn-'+k);
   let draw=null;
   if(r.ok){
-    try{ draw=m.svg(k==='losa'||k==='esc'?r:r.res); }
-    catch(e){ draw=emptyDraft('Dibujo no disponible para estos parámetros'); }
+    try{draw=m.svg(r);}
+    catch(e){draw=emptyDraft('Dibujo no disponible para estos parámetros');}
   }
   $('svg-'+k).innerHTML=draw||emptyDraft('Parámetros incompletos o fuera de rango');
   $('esc-'+k).textContent=r.ok?("f'c "+(r.res.fc||'—')):'—';
@@ -1629,7 +1714,7 @@ function renderMod(k){
   btn.disabled=!r.ok;
   btn._res=r.ok?{partidas:r.partidas,res:r.res}:null;
   renderElemList(k);
-} 
+}
 function memTable(rows,warns){
   let h='<table class="mem"><tbody>'+rows.map(r=>'<tr><td>'+r[0]+'<span class="f">'+r[1]+'</span></td><td>'+r[2]+'</td></tr>').join('')+'</tbody></table>';
   if(warns&&warns.length)h+=warns.map(w=>'<div style="padding:9px 14px;background:#FDF6E9;border-top:1px solid #EFD9A7;font-size:12px;color:#8A6410"><b>Validación:</b> '+w+'</div>').join('');
@@ -1647,7 +1732,7 @@ function addElement(k){
   if(!btn._res){toast('Revise los parámetros: hay valores fuera de rango.','err');return;}
   const num=project.els[k].length+1;
   pendingAdd={key:k,res:btn._res,num};
-  $('elName').value=M[k].name+' '+num;
+  $('elName').value=(M[k].name||k)+' '+num;
   $('elInfo').textContent='CANTIDADES A REGISTRAR → '+M[k].det(btn._res.res);
   $('elModal').classList.add('open');
   setTimeout(()=>{$('elName').focus();$('elName').select();},60);
@@ -1740,6 +1825,7 @@ function renderDashboard(){
   const qTec=keys.filter(k=>k.indexOf('Tecnopor')>=0).reduce((s,k)=>s+byP[k].q,0);
   const qMur=keys.filter(k=>k.indexOf('Ladrillo ')>=0&&k.indexOf('de techo')<0).reduce((s,k)=>s+byP[k].q,0);
   const qBoc=keys.filter(k=>k.indexOf('Boconcillo')>=0).reduce((s,k)=>s+byP[k].q,0);
+  const qTar=keys.filter(k=>k.indexOf('Tarrajeo')>=0).reduce((s,k)=>s+byP[k].q,0);
   $('dashIns').innerHTML='<table class="mem"><tbody>'
     +'<tr><td>Cemento — concreto<b class="f">según f\'c de cada partida</b></td><td>'+fmt(cemC,1)+' sac</td></tr>'
     +'<tr><td>Cemento — mortero de asiento<b class="f">según mezcla 1:n</b></td><td>'+fmt(cemM,1)+' sac</td></tr>'
@@ -1749,13 +1835,14 @@ function renderDashboard(){
     +'<tr><td>Ladrillo de techo (arcilla)</td><td>'+fmt(qLad,0)+' und</td></tr>'
     +'<tr><td>Tecnopor EPS</td><td>'+fmt(qTec,0)+' und</td></tr>'
     +'<tr><td>Ladrillo de albañilería</td><td>'+fmt(qMur,0)+' und</td></tr>'
+    +'<tr><td>Tarrajeo primario<b class="f">cimentación + muros</b></td><td>'+fmt(qTar,2)+' m²</td></tr>'
     +'</tbody></table>';
   refreshCounts();
 }
 function refreshCounts(){
   KEYS.forEach(k=>{const c=$('cnt-'+k);if(c)c.textContent=project.els[k].length;});
   const cp=$('cnt-proj');if(cp)cp.textContent=LS.get('MX_PROJECTS',[]).length;
-  $('tbProj').textContent=project.name;
+  const tp=$('tbProj');if(tp)tp.textContent=project.name;
 }
 /* ---------- proyectos ---------- */
 function openProjData(){
@@ -1884,14 +1971,15 @@ function openReport(){
     +'<tr><td>Acero GH-60</td><td class="r">'+fmt((byP['Acero de refuerzo GH-60']||{q:0}).q,1)+'</td><td class="r">kg</td></tr>'
     +'<tr><td>Aligerantes (arcilla + tecnopor)</td><td class="r">'+fmt(keys.filter(k=>k.indexOf('Ladrillo de techo')>=0||k.indexOf('Tecnopor')>=0).reduce((s,k)=>s+byP[k].q,0),0)+'</td><td class="r">und</td></tr>'
     +'<tr><td>Ladrillo de albañilería</td><td class="r">'+fmt(keys.filter(k=>k.indexOf('Ladrillo ')>=0&&k.indexOf('de techo')<0).reduce((s,k)=>s+byP[k].q,0),0)+'</td><td class="r">und</td></tr>'
-    +'<tr><td>Encofrados (total)</td><td class="r">'+fmt(keys.filter(k=>k.indexOf('Encofrado')>=0).reduce((s,k)=>s+byP[k].q,0),2)+'</td><td class="r">m²</td></tr></table>';
+    +'<tr><td>Encofrados (total)</td><td class="r">'+fmt(keys.filter(k=>k.indexOf('Encofrado')>=0).reduce((s,k)=>s+byP[k].q,0),2)+'</td><td class="r">m²</td></tr>'
+    +'<tr><td>Tarrajeo primario (total)</td><td class="r">'+fmt(keys.filter(k=>k.indexOf('Tarrajeo')>=0).reduce((s,k)=>s+byP[k].q,0),2)+'</td><td class="r">m²</td></tr></table>';
   body+='<h2><span>▸</span> Presupuesto referencial</h2>'
     +'<table class="rp-t"><tr><td>Subtotal</td><td class="r">S/ '+fmt(sub)+'</td></tr>'
     +'<tr><td>IGV 18%</td><td class="r">S/ '+fmt(igv)+'</td></tr>'
     +'<tr class="tot"><td>TOTAL REFERENCIAL</td><td class="r">S/ '+fmt(sub+igv)+'</td></tr></table>'
-    +'<p style="font-size:10.5px;color:#8A99A8;font-family:var(--mono)">Criterios: NTP 331.017 · RNE E.060 · acero GH-60 · rec. cimentación 7.5 cm · orden: infraestructura → superestructura → albañilería · valores referenciales.</p>';
+    +'<p style="font-size:10.5px;color:#8A99A8;font-family:var(--mono)">Criterios: NTP 331.017 · RNE E.060 · acero GH-60 · rec. cimentación 7.5 cm · valores referenciales.</p>';
   $('reportSheet').innerHTML='<div class="rp-top">'+logo+'<div class="inf"><h1>'+project.name+'</h1><div class="sub">Memoria de metrados · Valorización referencial</div></div>'
-    +'<div style="text-align:right;font-family:var(--mono);font-size:10px;color:#55677A;line-height:1.9">METRIZ v2.2 · SISTEMA DE METRADOS<br>'+new Date().toLocaleDateString('es-PE')+'</div></div>'
+    +'<div style="text-align:right;font-family:var(--mono);font-size:10px;color:#55677A;line-height:1.9">METRIZ v2.3 · SISTEMA DE METRADOS<br>'+new Date().toLocaleDateString('es-PE')+'</div></div>'
     +'<table class="rp-meta"><tr><td>Cliente</td><td>'+(project.client||'—')+'</td><td>Ubicación</td><td>'+(project.loc||'—')+'</td></tr>'
     +'<tr><td>Fecha</td><td>'+(project.date||'—')+'</td><td>Responsable</td><td>'+(project.resp||(USER?USER.name:'—'))+'</td></tr>'
     +'<tr><td>Elementos</td><td>'+all.length+'</td><td>Elaborado por</td><td>'+USER.name+' ('+ROLE_L[USER.role]+')</td></tr></table>'+body
@@ -1906,7 +1994,7 @@ function exportExcel(){
   let rows=Object.keys(byP).map(p=>{const q=byP[p].q,pu=priceOf(p);
     return '<tr><td>'+p+'</td><td>'+byP[p].u+'</td><td>'+q.toFixed(3)+'</td><td>'+(pu||'')+'</td><td>'+(q*pu).toFixed(2)+'</td></tr>';}).join('');
   const html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>'
-    +'<table border="1"><tr><td colspan="5" style="background:#0F2537;color:#fff;font-weight:bold">METRIZ v2.2 — METRADO DE ESTRUCTURAS</td></tr>'
+    +'<table border="1"><tr><td colspan="5" style="background:#0F2537;color:#fff;font-weight:bold">METRIZ v2.3 — METRADO DE ESTRUCTURAS</td></tr>'
     +'<tr><td colspan="5"><b>Obra:</b> '+project.name+' · <b>Cliente:</b> '+(project.client||'—')+' · <b>Fecha:</b> '+project.date+' · <b>Responsable:</b> '+(project.resp||USER.name)+'</td></tr>'
     +'<tr><td>Partida</td><td>Unidad</td><td>Cantidad</td><td>P.U. S/</td><td>Parcial S/</td></tr>'+rows+'</table></body></html>';
   const blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel'});
@@ -1950,23 +2038,30 @@ function createUser(){
   USERS.push(u);LS.set('MX_USERS',USERS);enter(u);
 }
 function enterGuest(){enter({name:'Administrador de prueba',role:'admin',pin:''});}
+/* Login a prueba de fallos: ningún error posterior puede impedir entrar */
 function enter(u){
-  USER=u;LS.set('MX_SESSION',u);
+  USER=u;
+  try{LS.set('MX_SESSION',u);}catch(e){}
   $('login').style.display='none';
   $('app').classList.add('on');
-  $('fUserName').textContent=u.name;$('fUserRole').textContent=ROLE_L[u.role];
+  $('fUserName').textContent=u.name;
+  $('fUserRole').textContent=ROLE_L[u.role]||'OPERATIVO';
   $('tbDate').textContent=new Date().toLocaleDateString('es-PE');
   project.resp=project.resp||u.name;
-  renderPrices();renderProjList();refreshCounts();
-  KEYS.forEach(k=>mod(k));
-  renderDashboard();
+  function safe(fn){try{fn();}catch(e){}}
+  safe(renderPrices);
+  safe(renderProjList);
+  safe(refreshCounts);
+  KEYS.forEach(k=>safe(function(){mod(k);}));
+  safe(renderDashboard);
   toast('Bienvenido, '+u.name+'. Sesión iniciada.');
   if(!STORAGE_OK)toast('Atención: el navegador bloquea el almacenamiento; los datos no persistirán al cerrar.','err');
 }
 function logout(){LS.set('MX_SESSION',null);USER=null;location.reload();}
 function updateNet(){
   const net=navigator.onLine?'RED DISPONIBLE · OPERA OFFLINE':'SIN RED · OPERANDO LOCAL';
-  $('netState').textContent=(STORAGE_OK?'BD LOCAL OK':'⚠ MEMORIA TEMPORAL')+' · '+net;
+  const el=$('netState');
+  if(el)el.textContent=(STORAGE_OK?'BD LOCAL OK':'⚠ MEMORIA TEMPORAL')+' · '+net;
 }
 
 /* ---------- ARRANQUE PROTEGIDO ---------- */
@@ -1983,11 +2078,7 @@ try{
 }catch(ex){
   const f=$('fatalBox');
   f.style.display='block';
-  f.textContent='}catch(ex){
-  const f=$('fatalBox');
-  f.style.display='block';
   f.textContent='ERROR AL INICIAR → '+ex.message+'  →  '+(ex.stack||'').split('\n').slice(1,3).join(' | ');
-} → '+ex.message+'. Verifique que el archivo se copió completo (debe terminar en </html>).';
 }
 </script>
 </body>
