@@ -1,5 +1,5 @@
 /* METRIZ — Service Worker: cachea todo para operar 100% sin red */
-const CACHE = 'metriz-v8';
+const CACHE = 'metriz-v9';
 const ASSETS = ['./', './index.html', './manifest.json', './icons/icon.svg'];
 
 self.addEventListener('install', e => {
